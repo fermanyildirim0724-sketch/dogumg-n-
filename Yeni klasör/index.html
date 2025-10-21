@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doğum Günün Kutlu Olsun 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;font-family:'Inter',sans-serif;background:#0f1724;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
+body::before, body::after{content:'';position:absolute;border-radius:50%;opacity:0.08;animation:move 20s linear infinite alternate;}
+body::before{width:1200px;height:600px;background:radial-gradient(circle,#ff7ab6,#0f1724);top:-300px;left:-200px;}
+body::after{width:800px;height:400px;background:radial-gradient(circle,#7b61ff,#0f1724);bottom:-200px;right:-150px;}
+@keyframes move{0%{transform:translate(0,0) rotate(0deg);}100%{transform:translate(50px,50px) rotate(360deg);}}
+.container{max-width:900px;padding:30px;position:relative;z-index:1;}
+h1{font-size:36px;margin-bottom:20px;}
+p{font-size:18px;line-height:1.7;white-space:pre-line;}
+.cake-btn{margin-top:30px;padding:12px 25px;font-size:18px;cursor:pointer;background:#ff7ab6;border:none;border-radius:8px;color:#fff;transition:0.3s;position:relative;}
+.cake-btn:hover{background:#ff4fa1;}
+.cake-btn span{position:absolute;top:-25px;left:50%;transform:translateX(-50%);font-size:14px;color:#fff;display:none;}
+.cake-btn:hover span{display:block;}
+.fullscreen-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#0f1724;z-index:999;flex-direction:column;align-items:center;justify-content:center;}
+.fullscreen-overlay img{width:400px;animation:float 2.2s ease-in-out infinite;cursor:pointer;}
+.fullscreen-overlay p{margin-top:20px;font-size:20px;}
+@keyframes float{0%{transform:translateY(0px);}50%{transform:translateY(-6px);}100%{transform:translateY(0px);}}
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+</style>
+</head>
+<body>
+<div class="container" id="mainContent">
+<h1>Doğum Günün Kutlu Olsun Canım Sevgilim 💕</h1>
+<p>Ne yazsam bilmiyorum aslında… çünkü kelimeler yetmiyor seni anlatmaya. Bazen sadece yüzüne bakmak bile yetiyor, içim ısınıyor. Seninle geçen her an, diğerlerinden biraz daha özel oluyor. Seni tanıdığımdan beri gülümsemem bile değişti, farkında mısın? Artık her şeyde seni arıyorum, her güzel şeyde sen varsın. Bir şarkı çalıyor, aklıma sen geliyorsun. Bir rüzgar esiyor, keşke yanında olsam diyorum. Bugün senin doğum günün ama sanki ben kutlamalıyım seni bulduğum için. İyi ki doğdun sevgilim, iyi ki varsın… Ve en önemlisi, iyi ki seni seviyorum. ♾️❤️</p>
+<button class="cake-btn" id="cakeBtn">Doğum Günü Pastan
+  <span>Ekrana çift Tıkla ve Üfle Canım :)</span>
+</button>
+</div>
+
+<div class="fullscreen-overlay" id="fullscreenOverlay">
+<img id="fullscreenCake" src="https://img.pikbest.com/origin/09/99/77/08xpIkbEsTyVf.png!sw800" alt="Doğum Günü Pastası">
+<p>Hadi üfle canım benim, her şeyin en güzelini hak ediyorsun</p>
+<canvas id="fullscreenConfetti"></canvas>
+</div>
+
+<script>
+const cakeBtn=document.getElementById('cakeBtn');
+const mainContent=document.getElementById('mainContent');
+const overlay=document.getElementById('fullscreenOverlay');
+const fullscreenCake=document.getElementById('fullscreenCake');
+const fullscreenCanvas=document.getElementById('fullscreenConfetti');
+const ctx=fullscreenCanvas.getContext('2d');
+
+fullscreenCanvas.width=window.innerWidth;
+fullscreenCanvas.height=window.innerHeight;
+
+cakeBtn.addEventListener('click',()=>{
+  mainContent.style.display='none';
+  overlay.style.display='flex';
+});
+
+let particles=[];
+
+function createConfetti(x, y){
+  for(let i=0;i<50;i++){
+    particles.push({
+      x:x + Math.random()*50-25,
+      y:y + Math.random()*50-25,
+      w:5+Math.random()*5,
+      h:8+Math.random()*8,
+      vx:-2+Math.random()*4,
+      vy:-2+Math.random()*-4,
+      color:['#ff7ab6','#7b61ff','#ffde59','#4dd6a3'][Math.floor(Math.random()*4)]
+    });
+  }
+}
+
+function drawConfetti(){
+  ctx.clearRect(0,0,fullscreenCanvas.width,fullscreenCanvas.height);
+  for(let p of particles){
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x,p.y,p.w,p.h);
+    p.x+=p.vx;
+    p.y+=p.vy;
+    if(p.y>fullscreenCanvas.height)p.y=-10;
+  }
+}
+
+fullscreenCake.addEventListener('dblclick',(e)=>{
+  const x=Math.random()*(window.innerWidth-100)+50;
+  const y=Math.random()*(window.innerHeight-100)+50;
+  createConfetti(x,y);
+  (function loop(){drawConfetti();requestAnimationFrame(loop);})();
+  setTimeout(()=>{particles=[];ctx.clearRect(0,0,fullscreenCanvas.width,fullscreenCanvas.height);},5000);
+});
+</script>
+</body>
+</html>
